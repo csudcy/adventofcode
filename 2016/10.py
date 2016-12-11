@@ -97,6 +97,10 @@ class BotNet(object):
         for bot_id, bot in self._bots.items():
             print bot_id, '->', bot._compared
 
+    def output_outputs(self):
+        for output_id, output in self._outputs.items():
+            print output_id, '->', output
+
     def find_compared(self, value_low, value_high):
         # Find the ID of the bot which compared (value_low, value_high)
         for bot_id, bot in self._bots.items():
@@ -124,3 +128,6 @@ assert test_net.find_compared(2, 5) == 2
 real_net = BotNet(INPUT)
 # real_net.output_compared()
 print real_net.find_compared(17, 61)
+
+# real_net.output_outputs()
+print real_net._outputs[0][0] * real_net._outputs[1][0] * real_net._outputs[2][0]
