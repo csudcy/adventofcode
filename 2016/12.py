@@ -17,12 +17,12 @@ def compile(input):
     ]
 
 
-def execute(program):
+def execute(program, a=0, b=0, c=0, d=0):
     registers = {
-        'a': 0,
-        'b': 0,
-        'c': 0,
-        'd': 0,
+        'a': a,
+        'b': b,
+        'c': c,
+        'd': d,
     }
 
     def get_register_or_value(key):
@@ -77,4 +77,7 @@ assert test_registers['a'] == 42
 
 program = compile(INPUT)
 registers = execute(program)
+print registers
+
+registers = execute(program, c=1)
 print registers
