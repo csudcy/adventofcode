@@ -1,25 +1,17 @@
 """
 Initial setup:
 
-1=polonium generator
-2=thulium generator
-3=promethium generator
-4=ruthenium generator
-5=cobalt generator
+1=polonium
+2=thulium
+3=promethium
+4=ruthenium
+5=cobalt
 
      1  2  3  4  5
 F4
 F3
 F2    M     M
 F1 E G  GM G  GM GM
-
-Make a simulator to check correctness & give it moves?
-
-MOVES = [
-    (U, (2,M), (,)),
-    (D, (2,M), (3,M)),
-    (U, (1,G), (,)),
-]
 """
 
 # NOTE: I've tried to use index to indicate 0 based and number to indicate 1 based
@@ -234,32 +226,37 @@ assert COMPLETE_TEST_BUILDING.get_toasted_chip_numbers() == []
 assert COMPLETE_TEST_BUILDING.is_complete() == True
 
 # Test the example moves
-print TEST_BUILDING.output(include_legend=True)
+# print TEST_BUILDING.output(include_legend=True)
 
 def test_move(id, direction, *args):
     expected_output = args[-1]
     items = args[:-1]
 
     TEST_BUILDING.move(direction, *items)
-    print '\n----- {} -----\n'.format(id)
-    print TEST_BUILDING.output()
+    # print '\n----- {} -----\n'.format(id)
+    # print TEST_BUILDING.output()
     actual_output = TEST_BUILDING.output_compact()
     if actual_output != expected_output:
         print 'Expected: ', expected_output
         print 'Actual  : ', actual_output
     assert actual_output == expected_output
 
-test_move( 1, U, (1, M),         (2, [(1, 2, 2), (2, 3, 1)]))
-test_move( 2, U, (1, M), (1, G), (3, [(1, 3, 3), (2, 3, 1)]))
-test_move( 3, D, (1, M),         (2, [(1, 3, 2), (2, 3, 1)]))
-test_move( 4, D, (1, M),         (1, [(1, 3, 1), (2, 3, 1)]))
-test_move( 5, U, (1, M), (2, M), (2, [(1, 3, 2), (2, 3, 2)]))
-test_move( 6, U, (1, M), (2, M), (3, [(1, 3, 3), (2, 3, 3)]))
-test_move( 7, U, (1, M), (2, M), (4, [(1, 3, 4), (2, 3, 4)]))
-test_move( 8, D, (1, M),         (3, [(1, 3, 3), (2, 3, 4)]))
-test_move( 9, U, (1, G), (2, G), (4, [(1, 4, 3), (2, 4, 4)]))
-test_move(10, D, (2, M),         (3, [(1, 4, 3), (2, 4, 3)]))
-test_move(11, U, (1, M), (2, M), (4, [(1, 4, 4), (2, 4, 4)]))
+TEST_MOVES = [
+    (U, (1, M),         (2, [(1, 2, 2), (2, 3, 1)])),
+    (U, (1, M), (1, G), (3, [(1, 3, 3), (2, 3, 1)])),
+    (D, (1, M),         (2, [(1, 3, 2), (2, 3, 1)])),
+    (D, (1, M),         (1, [(1, 3, 1), (2, 3, 1)])),
+    (U, (1, M), (2, M), (2, [(1, 3, 2), (2, 3, 2)])),
+    (U, (1, M), (2, M), (3, [(1, 3, 3), (2, 3, 3)])),
+    (U, (1, M), (2, M), (4, [(1, 3, 4), (2, 3, 4)])),
+    (D, (1, M),         (3, [(1, 3, 3), (2, 3, 4)])),
+    (U, (1, G), (2, G), (4, [(1, 4, 3), (2, 4, 4)])),
+    (D, (2, M),         (3, [(1, 4, 3), (2, 4, 3)])),
+    (U, (1, M), (2, M), (4, [(1, 4, 4), (2, 4, 4)])),
+]
+
+for id, move in enumerate(TEST_MOVES):
+    test_move(id, *move)
 
 assert TEST_BUILDING.is_complete() == True
 
@@ -267,5 +264,53 @@ assert TEST_BUILDING.is_complete() == True
 
 
 
+BUILDING = RTGBuilding(
+    ('Polonium', 1, 2),
+    ('Thulium', 1, 1),
+    ('Promethium', 1, 2),
+    ('Ruthenium', 1, 1),
+    ('Cobalt', 1, 1),
+)
+BUILDING_INITIAL_OUTPUT = """Legend:
+1=Polonium
+2=Thulium
+3=Promethium
+4=Ruthenium
+5=Cobalt
 
+     1  2  3  4  5
+F4
+F3
+F2    M     M
+F1 E G  GM G  GM GM"""
+print BUILDING.output(include_legend=True)
+assert BUILDING.output(include_legend=True) == BUILDING_INITIAL_OUTPUT
 
+BUILDING_MOVES = [
+    (U, (2, M),       ),
+    (U, (1, M), (2, M)),
+    (U, (1, M), (2, M)),
+    (D, (1, M),       ),
+    (D, (1, M),       ),
+    (U, (1, M), (3, M)),
+    (U, (1, M), (3, M)),
+    (D, (1, M),       ),
+    (D, (1, M),       ),
+    (D, (1, M),       ),
+    (U, (1, M), (4, M)),
+    (U, (1, M), (4, M)),
+    (U, (1, M), (4, M)),
+    (D, (1, M),       ),
+    (D, (1, M),       ),
+    (D, (1, M),       ),
+    (U, (1, M), (5, M)),
+    (U, (1, M), (5, M)),
+    (U, (1, M), (5, M)),
+]
+for id, move in enumerate(BUILDING_MOVES):
+    direction = move[0]
+    items = move[1:]
+
+    print '\n----- {} -----\n'.format(id)
+    BUILDING.move(direction, *items)
+    print BUILDING.output()
