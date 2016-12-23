@@ -81,6 +81,7 @@ def find_route(start_x, start_y, target_x, target_y, number):
             if not is_open(next_x, next_y, number):
                 continue
 
+            # Check if we are at the target
             next_route = route + [(next_x, next_y)]
             if next_x == target_x and next_y == target_y:
                 print generate_map(number, route=next_route)
@@ -106,3 +107,54 @@ print find_route(1, 1, 31, 39, INPUT)
 # Start Y was wrong
 
 
+
+
+def find_points(start_x, start_y, max_steps, number):
+    visited = [
+        (start_x, start_y)
+    ]
+    to_visit = [
+        # x, y, route
+        (start_x, start_y, [(start_x, start_y)])
+    ]
+    while to_visit:
+        x, y, route = to_visit.pop(0)
+
+        # Try each direction from here
+        for diff_x, diff_y in DIRECTIONS:
+            # Work out the next space to visit
+            next_x = x + diff_x
+            next_y = y + diff_y
+
+            # Check it is on the map
+            if next_x < 0 or next_y < 0:
+                continue
+
+            # Check we haven't visited it before
+            if (next_x, next_y) in visited:
+                continue
+
+            # Check it is open
+            if not is_open(next_x, next_y, number):
+                continue
+
+            # Check if we have steps remaining
+            next_route = route + [(next_x, next_y)]
+            if len(route) > max_steps:
+                continue
+
+            # Add it to the list to visit
+            to_visit.append(
+                (next_x, next_y, next_route)
+            )
+
+            # Don't visit it again
+            visited.append(
+                (next_x, next_y)
+            )
+
+    return len(visited)
+
+print find_points(1, 1, 50, INPUT)
+# Got 132; too low
+# Max_step checking was off-by-one
