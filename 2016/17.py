@@ -80,3 +80,42 @@ assert get_shortest_path('kglvqrro') == 'DDUDRLRRUDRD'
 assert get_shortest_path('ulqzkmiv') == 'DRURDRUDDLLDLUURRDULRLDUUDDDRR'
 
 print get_shortest_path(INPUT)
+
+
+def get_longest_path(key, start_x=0, start_y=0, target_x=3, target_y=3):
+    to_visit = [
+        # (x, y, path)
+        (start_x, start_y, '')
+    ]
+    path_count = 0
+    longest_path = ''
+
+    while to_visit:
+        # Get the next location/path to try
+        x, y, path = to_visit.pop(0)
+
+        # Check all of the possibl directions
+        possible_directions = get_possible_directions(x, y, key, path)
+
+        for new_x, new_y, new_path in possible_directions:
+            # Have we reached the target yet?
+            if new_x == target_x and new_y == target_y:
+                path_count += 1
+                if len(new_path) > len(longest_path):
+                    longest_path = new_path
+                continue
+
+            to_visit.append((new_x, new_y, new_path))
+
+    print '\n'
+    print path_count
+    print longest_path
+    print len(longest_path)
+
+    return len(longest_path)
+
+assert get_longest_path('ihgpwlah') == 370
+assert get_longest_path('kglvqrro') == 492
+assert get_longest_path('ulqzkmiv') == 830
+
+print get_longest_path(INPUT)
